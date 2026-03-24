@@ -8,7 +8,6 @@ Angajat::Angajat()
 {
     nume = nullptr;
     prenume = nullptr;
-    telefon = nullptr;
     experienta = 0;
     salariu = 0.0f;
     specializare = nullptr;
@@ -16,26 +15,18 @@ Angajat::Angajat()
 }
 
 //constr de initializare
-Angajat::Angajat(const char* nume, const char* prenume, const char* telefon,const char* gen, int experienta, float salariu, const char* specializare)
+Angajat::Angajat(const char* nume, const char* prenume, int experienta, float salariu, const char* specializare)
 {
     if(nume){
         this->nume = new char[strlen(nume) + 1];
         strcpy(this->nume, nume);
-    } else{
+    }else
         this->nume = nullptr;
-    }
     if(prenume){
         this->prenume = new char[strlen(prenume) + 1];
         strcpy(this->prenume, prenume);
-    }else{
+    }else
         this->prenume = nullptr;
-    }
-    if(telefon){
-        this->telefon = new char[strlen(telefon) + 1];
-        strcpy(this->telefon, telefon);
-    } else{
-        this->telefon = nullptr;
-    }
 
     this->experienta = experienta;
     this->salariu = salariu;
@@ -43,9 +34,8 @@ Angajat::Angajat(const char* nume, const char* prenume, const char* telefon,cons
     if(specializare){
         this->specializare = new char[strlen(specializare) + 1];
         strcpy(this->specializare, specializare);
-    } else{
+    } else
         this->specializare = nullptr;
-    }
     numarAngajati++;
 }
 
@@ -55,30 +45,21 @@ Angajat::Angajat(const Angajat& other)
     if(other.nume){
         nume = new char[strlen(other.nume) + 1];
         strcpy(nume, other.nume);
-    } else{
+    } else
         nume = nullptr;
-    }
     if(other.prenume){
         prenume = new char[strlen(other.prenume) + 1];
         strcpy(prenume, other.prenume);
-    } else{
+    } else
         prenume = nullptr;
-    }
 
-    if(other.telefon){
-        telefon = new char[strlen(other.telefon) + 1];
-        strcpy(telefon, other.telefon);
-    } else{
-        telefon = nullptr;
-    }
     experienta = other.experienta;
     salariu = other.salariu;
     if(other.specializare){
         specializare = new char[strlen(other.specializare) + 1];
         strcpy(specializare, other.specializare);
-    }else{
+    }else
         specializare = nullptr;
-    }
     numarAngajati++;
 }
 
@@ -88,29 +69,19 @@ Angajat& Angajat::operator=(const Angajat& other)
     if(this != &other){
         delete[] nume;
         delete[] prenume;
-        delete[] telefon;
         delete[] specializare;
 
         if(other.nume){
             nume = new char[strlen(other.nume) + 1];
             strcpy(nume, other.nume);
-        } else{
+        } else
             nume = nullptr;
-        }
 
         if(other.prenume){
             prenume = new char[strlen(other.prenume) + 1];
             strcpy(prenume, other.prenume);
-        } else{
+        } else
             prenume = nullptr;
-        }
-
-        if(other.telefon){
-            telefon = new char[strlen(other.telefon) + 1];
-            strcpy(telefon, other.telefon);
-        } else{
-            telefon = nullptr;
-        }
 
         experienta = other.experienta;
         salariu = other.salariu;
@@ -118,9 +89,8 @@ Angajat& Angajat::operator=(const Angajat& other)
         if(other.specializare){
             specializare = new char[strlen(other.specializare) + 1];
             strcpy(specializare, other.specializare);
-        } else{
+        } else
             specializare = nullptr;
-        }
     }
     return *this;
 }
@@ -130,7 +100,6 @@ Angajat::~Angajat()
 {
     delete[] nume;
     delete[] prenume;
-    delete[] telefon;
     delete[] specializare;
     numarAngajati--;
 }
@@ -143,10 +112,6 @@ const char* Angajat::getNume() const
 const char* Angajat::getPrenume() const
 {
     return prenume;
-}
-const char* Angajat::getTelefon() const
-{
-    return telefon;
 }
 int Angajat::getExperienta() const
 {
@@ -169,9 +134,8 @@ void Angajat::setNume(const char* nume)
     if(nume){
         this->nume = new char[strlen(nume) + 1];
         strcpy(this->nume, nume);
-    } else{
+    } else
         this->nume = nullptr;
-    }
 }
 void Angajat::setPrenume(const char* prenume)
 {
@@ -180,20 +144,8 @@ void Angajat::setPrenume(const char* prenume)
     if(prenume){
         this->prenume = new char[strlen(prenume) + 1];
         strcpy(this->prenume, prenume);
-    } else{
+    } else
         this->prenume = nullptr;
-    }
-}
-void Angajat::setTelefon(const char* telefon)
-{
-    delete[] this->telefon;
-
-    if(telefon){
-        this->telefon = new char[strlen(telefon) + 1];
-        strcpy(this->telefon, telefon);
-    } else {
-        this->telefon = nullptr;
-    }
 }
 void Angajat::setSpecializare(const char* specializare)
 {
@@ -202,9 +154,8 @@ void Angajat::setSpecializare(const char* specializare)
     if(specializare){
         this->specializare = new char[strlen(specializare) + 1];
         strcpy(this->specializare, specializare);
-    } else{
+    } else
         this->specializare = nullptr;
-    }
 }
 void Angajat::setExperienta(int experienta)
 {
@@ -218,7 +169,7 @@ void Angajat::setSalariu(float salariu)
 //functii
 bool Angajat::areExperienta() const
 {
-    return (experienta>0);
+    return (experienta>=5);
 }
 
 float Angajat::calcBonus(float procent) const
@@ -228,13 +179,13 @@ float Angajat::calcBonus(float procent) const
 
 void Angajat::afiseazaTotalAngajati()
 {
-    std::cout << "Numar total de angajati: " << numarAngajati << std::endl;
+    std::cout<<"Numar total de angajati: "<<numarAngajati<<std::endl;
 }
 
 //operator <<
 std::ostream& operator<<(std::ostream& os, const Angajat& a)
 {
-    os << "Nume: " << (a.nume)<< ", Prenume: "<<(a.prenume)<<", Telefon: "<<(a.telefon)
-    <<", Experienta: "<<a.experienta<<" ani"<< ", Salariu: " << a.salariu<<", Specializare: "<< (a.specializare);
+    os<< "Nume: "<< (a.nume)<<", Prenume: "<<(a.prenume)<<", Telefon: "<<(a.telefon)
+    <<", Experienta: "<<a.experienta<<" ani"<< ", Salariu: "<< a.salariu<<", Specializare: "<<(a.specializare);
     return os;
 }

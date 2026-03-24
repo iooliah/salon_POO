@@ -8,8 +8,6 @@ class Angajat
 private:
     char* nume;
     char* prenume;
-    char* telefon;
-    char* gen;
     int experienta;
     float salariu;
     char* specializare;
@@ -19,8 +17,7 @@ public:
     //constructor implicit
     Angajat();
     //constructor de initializare
-    Angajat(const char* nume, const char* prenume, const char* telefon,
-            const char* gen, int experienta, float salariu, const char* specializare);
+    Angajat(const char* nume, const char* prenume, int experienta, float salariu, const char* specializare);
 
     //constructor de copiere
     Angajat(const Angajat& other);
@@ -34,8 +31,6 @@ public:
     //getters
     const char* getNume() const;
     const char* getPrenume() const;
-    const char* getTelefon() const;
-    const char* getGen() const;
     int getExperienta() const;
     float getSalariu() const;
     const char* getSpecializare() const;
@@ -43,8 +38,6 @@ public:
     //setters
     void setNume(const char* nume);
     void setPrenume(const char* prenume);
-    void setTelefon(const char* telefon);
-    void setGen(const char* gen);
     void setExperienta(int experienta);
     void setSalariu(float salariu);
     void setSpecializare(const char* specializare);
