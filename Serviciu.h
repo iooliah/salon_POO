@@ -22,7 +22,7 @@ public:
     ~Serviciu();                                                 //destructor
 
 
-    //get-eri
+    //getters
     const char* getNume() const;
     float getPret() const;
     bool getAvans() const;
@@ -30,7 +30,7 @@ public:
     int getDurata() const;
     const char* getLocatie() const;
 
-    //set-eri
+    //setters
     void setNume(const char* nume);
     void setPret(float pret);
     void setAvans(bool avans);
@@ -42,10 +42,9 @@ public:
     float calcAvans(float procent) const;
 
     friend std::ostream& operator<<(std::ostream& os, const Serviciu& s);
+    friend std::istream& operator>>(std::istream& is, Serviciu& s);
 
 };
-
-
 
 
 #endif // SERVICIU_H_INCLUDED

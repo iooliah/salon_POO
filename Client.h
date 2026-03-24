@@ -31,7 +31,7 @@ public:
     //destructor
     ~Client();
 
-    //get-eri
+    //getters
     const char* getNume() const;
     const char* getPrenume() const;
     const char* getTelefon() const;
@@ -39,7 +39,7 @@ public:
     const char* getGen() const;
     int getVarsta() const;
 
-    //set-eri
+    //setters
     void setNume(const char* nume);
     void setPrenume(const char* prenume);
     void setTelefon(const char* telefon);

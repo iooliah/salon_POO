@@ -42,7 +42,7 @@ public:
     //destructor
     ~Programare();
 
-    //get-eri
+    //getters
     Client getClient() const;
     Angajat getAngajat() const;
     Serviciu getServiciu() const;
@@ -51,13 +51,11 @@ public:
     TipPlata getTipPlata() const;
     const char* getProduseRecomandate() const;
 
-    //set-eri
+    //setters
     void setData(const char* data);
     void setOra(const char* ora);
     void setTipPlata(TipPlata tipPlata);
     void setProduseRecomandate(const char* produse);
-
-
     float calcCostFinal() const;
     bool esteUrgenta() const;
 

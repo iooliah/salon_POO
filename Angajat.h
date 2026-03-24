@@ -13,11 +13,10 @@ private:
     int experienta;
     float salariu;
     char* specializare;
-
     static int numarAngajati;
 
 public:
-    // constructor implicit
+    //constructor implicit
     Angajat();
     //constructor de initializare
     Angajat(const char* nume, const char* prenume, const char* telefon,
@@ -32,7 +31,7 @@ public:
     //destructor
     ~Angajat();
 
-    //get-eri
+    //getters
     const char* getNume() const;
     const char* getPrenume() const;
     const char* getTelefon() const;
@@ -41,7 +40,7 @@ public:
     float getSalariu() const;
     const char* getSpecializare() const;
 
-    //set-eri
+    //setters
     void setNume(const char* nume);
     void setPrenume(const char* prenume);
     void setTelefon(const char* telefon);
