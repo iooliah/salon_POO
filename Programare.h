@@ -5,7 +5,7 @@
 #include "Angajat.h"
 #include "Serviciu.h"
 
-enum TipPlata
+enum TipPlata                    //enumerare de moduri de plata pt a putea oferi reducere la cash
 {
     CASH,
     CARD,
@@ -31,7 +31,7 @@ public:
     //constructor de copiere
     Programare(const Programare& other);
 
-    //operator
+    //operator =
     Programare& operator=(const Programare& other);
 
     //destructor
@@ -50,12 +50,11 @@ public:
     void setOra(const char* ora);
     void setTipPlata(TipPlata tipPlata);
 
-    float calcCostFinalCuReduceri(Programare programari[],int nrProgramari) const;
+    float calcCostFinal(Programare programari[],int nrprog) const;  //functie pentru a calcula cat trebuie sa plateasca un client dupa aplicarea reducerilor
+    static int numaraProgramariClientZi(Programare programari[],int nrprog,const Client& client,const char* data);  //pt a afla daca clientul a avut mai multe programari intr-o zi pentru reducere
+    static float calcIncasariZi(Programare programari[],int nrprog,const char* data);  //cat s-a castigat intr-o zi anume
 
-    static int numaraProgramariClientInZi(Programare programari[],int nrProgramari,const Client& client,const char* data);
-    static float calcIncasariZi(Programare programari[],int nrProgramari,const char* data);
-
-    friend std::ostream& operator<<(std::ostream& os, const Programare& p);
+    friend std::ostream& operator<<(std::ostream& os, const Programare& p);  //operator <<
 };
 
 #endif // PROGRAMARE_H_INCLUDED

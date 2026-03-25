@@ -15,21 +15,23 @@ Serviciu::Serviciu(const char* nume, float pret, int durata)
     if(nume){
         this->nume = new char[strlen(nume)+1];
         strcpy(this->nume, nume);
-    }else
+    }else{
         this->nume = nullptr;
+    }
 
     this->pret = pret;
     this->durata = durata;
 }
 
 //constr de copiere
-Serviciu::Serviciu(const Serviciu& other):pret(other.pret), durata(other.durata))
+Serviciu::Serviciu(const Serviciu& other):pret(other.pret), durata(other.durata)
 {
     if(other.nume){
         nume = new char[strlen(other.nume) + 1];
         strcpy(nume, other.nume);
-    }else
+    }else{
         nume = nullptr;
+    }
 }
 
 //operator de copiere
@@ -40,13 +42,13 @@ Serviciu& Serviciu::operator=(const Serviciu& other)
 
         pret = other.pret;          //copiez datele vechi
         durata = other.durata;
-        reducere10 = other.reducere10;
 
         if(other.nume){             //aloc spatiu si copiez noul nume
             nume = new char[strlen(other.nume) +1];
             strcpy(nume, other.nume);
-        }else
+        }else{
             nume = nullptr;
+        }
     }
     return *this;
 }
@@ -76,28 +78,4 @@ float Serviciu::getPret() const
 int Serviciu::getDurata() const
 {
     return durata;
-}
-
-//setters
-void Serviciu::setNume(const char* nume)
-{
-    delete[] this->nume;
-    if(nume){
-        this->nume = new char[strlen(nume) + 1];
-        strcpy(this->nume, nume);
-    } else{
-        this->nume = nullptr;
-    }
-}
-void Serviciu::setPret(float pret)
-{
-    this->pret = pret;
-}
-void Serviciu::setReducere10(bool reducere)
-{
-    this->reducere10 = reducere;
-}
-void Serviciu::setDurata(int durata)
-{
-    this->durata = durata;
 }

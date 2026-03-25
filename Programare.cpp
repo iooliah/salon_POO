@@ -2,8 +2,7 @@
 #include <cstring>
 
 //constructor implicit
-Programare::Programare()
-{
+Programare::Programare(){
     data = nullptr;
     ora = nullptr;
     tipPlata = CASH;
@@ -56,13 +55,11 @@ Programare& Programare::operator=(const Programare& other){
             strcpy(data,other.data);
         }else
             data = nullptr;
-
         if(other.ora){
             ora = new char[strlen(other.ora) + 1];
             strcpy(ora,other.ora);
         }else
             ora = nullptr;
-
         tipPlata = other.tipPlata;
     }
     return *this;
@@ -118,48 +115,42 @@ void Programare::setTipPlata(TipPlata tipPlata){
     this->tipPlata = tipPlata;
 }
 
-//metode
-
-int Programare::numaraProgramariClientInZi(Programare programari[],int nrProgramari,const Client& client,const char* data)
-{
-    int nr = 0;
-    for(int i = 0; i < nrProgramari; i++){
-        if(strcmp(programari[i].getData(),data) == 0 &&
-           strcmp(programari[i].getClient().getNume(),client.getNume()) == 0 &&
-           strcmp(programari[i].getClient().getPrenume(),client.getPrenume()) == 0){
-            nr++;
+//functie pentru a afla cate programari are un client intr-o zi
+int Programare::numaraProgramariClientZi(Programare programari[], int nrprog, const Client& client, const char* data){
+    int nr = 0;    //contor
+    for(int i = 0; i < nrprog; i++){       //nrprog il vom creste in main dupa fiecare programare realizata
+        if(strcmp(programari[i].getData(), data) == 0 &&strcmp(programari[i].getClient().getNume(), client.getNume()) == 0
+           &&strcmp(programari[i].getClient().getPrenume(), client.getPrenume()) == 0){            //compar data, nume, prenume din vectorul cu toate programarile cu datele unei anumite programari dintr-o zi
+            nr++;                                 //daca gasesc, cresc contorul
         }
     }
     return nr;
 }
 
-float Programare::calcCostFinalCuReduceri(Programare programari[],int nrProgramari) const
-{
-    float cost = serviciu.getPret();
-    if(client.esteFidel()){
-        cost = cost - cost * 0.02f;
+float Programare::calcCostFinal(Programare programari[],int nrprog) const{                                   //calculez costul unei programari in urma reducerilor/surplusurilor adaugate
+    float cost = serviciu.getPret();          //costul unei programari este costul serviciului
+    if (angajat.areExperienta()){
+        cost += 10;                 //daca angajatul are experienta >=5 ani, costul este mai mare cu 10 lei
     }
-    if(strcmp(data,"11.09")==0){
-        cost = cost - cost * 0.10f;
+    if(strcmp(data,"11.09")==0){    //daca ziua programarii este in ziua deschiderii salonului, reducere 10%
+        cost = cost - cost*0.10f;
     }
-    if(tipPlata == CASH){
+    if(tipPlata == CASH){           //daca este aleasa optiunea de a plati cash, se scad 2 lei din total
         cost = cost - 2;
     }
 
-
-    int nr = numaraProgramariClientInZi(programari,nrProgramari,client,data);
-    if(nr >= 2){
-        cost = cost - cost *0.10f;
+    if(numaraProgramariClientZi(programari,nrprog,client,data) >= 2){   //daca sunt mai mult de 2 programari intr-o zi
+        cost = cost - cost*0.10f;                                             //de la acelasi client, reducere 10%
     }
     return cost;
 }
 
-float Programare::calcIncasariZi(Programare programari[],int nrProgramari,const char* data)
-{
+float Programare::calcIncasariZi(Programare programari[], int nrprog, const char* data)
+{                                               //calculez profitul dintr-o zi aleasa
     float suma = 0.0f;
-    for(int i = 0; i < nrProgramari; i++){
-        if(strcmp(programari[i].getData(), data) == 0){
-            suma += programari[i].calcCostFinalCuReduceri(programari,nrProgramari);
+    for(int i = 0; i<nrprog; i++){
+        if(strcmp(programari[i].getData(), data) == 0){          //compar data aleasa cu datele tuturor programarilor
+            suma += programari[i].calcCostFinal(programari,nrprog);   //adaug la suma costul final al programarii gasite
         }
     }
     return suma;

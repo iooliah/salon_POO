@@ -10,8 +10,6 @@ private:
     char* prenume;
     char* telefon;
 
-    char istoric[100][100];
-    int nrIstoric;
     static int numarClienti;
 
 public:
@@ -23,7 +21,7 @@ public:
     //constructor de copiere
     Client(const Client& other);
 
-    //operator
+    //operator =
     Client& operator=(const Client& other);
 
     //destructor
@@ -33,18 +31,7 @@ public:
     const char* getNume() const;
     const char* getPrenume() const;
     const char* getTelefon() const;
-    int getNrIstoric() const;
-    const char* getIstoricItem(int index) const;
 
-    //setters
-    void setNume(const char* nume);
-    void setPrenume(const char* prenume);
-    void setTelefon(const char* telefon);
-    void adaugaIstoric(const char* procedura);
-
-    bool esteFidel() const;
-    static void afiseazaTotalClienti();
-
-    friend std::ostream& operator<<(std::ostream& os, const Client& c);
+    friend std::ostream& operator<<(std::ostream& os, const Client& c);    //operator <<
 };
 #endif // CLIENT_H_INCLUDED
