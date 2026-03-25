@@ -1,6 +1,7 @@
 #include "Programare.h"
 #include <cstring>
 
+
 //constructor implicit
 Programare::Programare(){
     data = nullptr;
@@ -115,12 +116,15 @@ void Programare::setTipPlata(TipPlata tipPlata){
     this->tipPlata = tipPlata;
 }
 
+bool Programare::esteAcelasiClient(const Client& c1, const Client& c2){   //fct privata verficare daca e ac persoana
+    return std::strcmp(c1.getNume(), c2.getNume()) == 0 && std::strcmp(c1.getPrenume(), c2.getPrenume()) == 0;
+}
+
 //functie pentru a afla cate programari are un client intr-o zi
 int Programare::numaraProgramariClientZi(Programare programari[], int nrprog, const Client& client, const char* data){
     int nr = 0;    //contor
     for(int i = 0; i < nrprog; i++){       //nrprog il vom creste in main dupa fiecare programare realizata
-        if(strcmp(programari[i].getData(), data) == 0 &&strcmp(programari[i].getClient().getNume(), client.getNume()) == 0
-           &&strcmp(programari[i].getClient().getPrenume(), client.getPrenume()) == 0){            //compar data, nume, prenume din vectorul cu toate programarile cu datele unei anumite programari dintr-o zi
+        if(strcmp(programari[i].getData(), data) == 0 && esteAcelasiClient(programari[i].getClient(), client)){         //compar data, nume, prenume din vectorul cu toate programarile cu datele unei anumite programari dintr-o zi
             nr++;                                 //daca gasesc, cresc contorul
         }
     }

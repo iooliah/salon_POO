@@ -20,6 +20,7 @@ private:
     char* data;
     char* ora;
     TipPlata tipPlata;
+    static bool esteAcelasiClient(const Client& c1, const Client& c2);          //functie privata pt verificarea programarilor
 
 public:
     //constructor implicit
