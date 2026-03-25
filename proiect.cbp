@@ -32,31 +32,31 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="Angajat.cpp">
+		<Unit filename="src/Angajat.cpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="Angajat.h">
+		<Unit filename="headers/Angajat.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="Client.cpp">
+		<Unit filename="src/Client.cpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="Client.h">
+		<Unit filename="headers/Client.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="Programare.cpp">
+		<Unit filename="src/Programare.cpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="Programare.h">
+		<Unit filename="headers/Programare.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="Serviciu.cpp">
+		<Unit filename="src/Serviciu.cpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="Serviciu.h">
+		<Unit filename="headers/Serviciu.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="main.cpp" />
+		<Unit filename="src/main.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
