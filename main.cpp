@@ -35,19 +35,26 @@ bool angajatDisponibil(const Programare programari[], int nrprog, const Angajat&
 
 int main()
 {                                                   //introduc clienti, angajati, servicii deja existente
-    Client client1("Toader", "Ana", "0712345678");
-    Client client2("Belceanu", "Maria", "0798765432");
-    Client client3("Boros", "Eliza", "0701928356");
-    Angajat angajat1("Vladescu", "Ioana", 6, "manichiura");
-    Angajat angajat2("Barbu", "Eric", 2, "coafor");
-    Angajat angajat3("Trandafir", "Dana", 8, "coafor");
-    Serviciu serviciu1("manichiura", 120, 60);
-    Serviciu serviciu2("coafor", 50, 30);
-    Serviciu serviciu3("tratamente", 100, 25);
+    Client clienti[] ={
+        Client("Toader", "Ana", "0712345678"),
+        Client("Belceanu", "Maria", "0798765432"),
+        Client("Boros", "Eliza", "0701928356")
+    };
+    Angajat angajati[] ={
+        Angajat("Vladescu", "Ioana", 6, "manichiura"),
+        Angajat("Barbu", "Eric", 2, "coafor"),
+        Angajat("Trandafir", "Dana", 8, "coafor")
+    };
 
-    Programare programari[100];            //creez vectorul care sa mentina toate programrile pe durata unei rulari
+    Serviciu servicii[] ={
+        Serviciu("manichiura", 120, 60),
+        Serviciu("coafor", 50, 30),
+        Serviciu("tratamente", 100, 25)
+    };
+
+    Programare programari[100];            //creez vectorul care sa mentina toate programarile pe durata unei rulari
     int nrprog = 0;                        //pentru a tine cont de total
-    int nrclienti=3, nrangajati=3;
+    const int nrclienti = 3, nrangajati = 3, nrservicii = 3;
 
     char continua = 'd';                   //pentru raspunsul da, daca este aleasa optiunea pozitiva, continua
     do{
@@ -64,38 +71,33 @@ int main()
         std::cin >> prenume;
 
         //caut clientul printre cei existenti
-        if(std::strcmp(client1.getNume(),nume) == 0 && std::strcmp(client1.getPrenume(),prenume) == 0)
-            gasit = &client1;
-        else if(std::strcmp(client2.getNume(),nume) == 0 && std::strcmp(client2.getPrenume(),prenume) == 0)
-            gasit = &client2;
-        else if(std::strcmp(client3.getNume(),nume) == 0 && std::strcmp(client3.getPrenume(),prenume) == 0)
-            gasit = &client3;
-        else{                                             //daca nu exista, intreb daca mai vrea sa incerce o data
+        for(int i = 0; i < nrclienti; i++){
+            if(std::strcmp(clienti[i].getNume(), nume) == 0 && std::strcmp(clienti[i].getPrenume(), prenume) == 0) {
+                gasit = &clienti[i];
+                break;
+            }
+        }
+        if(gasit == nullptr){                                             //daca nu exista, intreb daca mai vrea sa incerce o data
             std::cout << "Clientul nu exista.\n";
-            std::cout << "Vrei sa mai adaugi o programare?: ";
+            std::cout << "Vrei sa mai adaugi o programare? (d/n): ";
             std::cin >> continua;                         //daca da, continua, de nu, iese din do while
             continue;
         }
 
         std::cout << "\nAlege serviciul:\n";
-        std::cout << "1. " << serviciu1<<std::endl;
-        std::cout << "2. " << serviciu2<<std::endl;
-        std::cout << "3. " << serviciu3<<std::endl;
+        for(int i = 0; i < nrservicii; i++){
+            std::cout << i+1 << ". " << servicii[i] << '\n';
+        }
         std::cin >> optiuneServiciu;
 
         //caut prin serviciile existente
-        if(optiuneServiciu == 1)
-            serviciuales = &serviciu1;
-        else if(optiuneServiciu == 2)
-            serviciuales = &serviciu2;
-        else if(optiuneServiciu == 3)
-            serviciuales = &serviciu3;
-        else{
-            std::cout << "Serviciu invalid.\n";                 //daca nu exista, intreb daca mai vrea sa incerce o data
-            std::cout << "Vrei sa mai adaugi o programare?: ";
-            std::cin >> continua;                               //trec mai departe
+        if(optiuneServiciu<1 || optiuneServiciu>nrservicii){
+            std::cout << "Serviciu invalid.\n";
+            std::cout << "Vrei sa mai adaugi o programare? (d/n): ";
+            std::cin >> continua;
             continue;
         }
+        serviciuales = &servicii[optiuneServiciu - 1];
 
         std::cout << "Introdu data: ";                  //cer data si ora
         std::cin >> data;
@@ -105,19 +107,15 @@ int main()
         //afisez doar angajatii care au specializarea buna si sunt liberi
         //optiunile bune le pun intr-un vector (trebuie sa aiba specializarea aleasa de client)
         int nrangajatbun = 0;          //index
-        if(std::strcmp(angajat1.getSpecializare(), serviciuales->getNume()) ==0 && angajatDisponibil(programari, nrprog, angajat1, data, ora)){
-            angajatbun[nrangajatbun++] = &angajat1;
-        }
-        if(std::strcmp(angajat2.getSpecializare(), serviciuales->getNume()) == 0 && angajatDisponibil(programari, nrprog, angajat2, data, ora)){
-            angajatbun[nrangajatbun++] = &angajat2;
-        }
-        if(std::strcmp(angajat3.getSpecializare(), serviciuales->getNume()) == 0 && angajatDisponibil(programari, nrprog, angajat3, data, ora)){
-            angajatbun[nrangajatbun++] = &angajat3;
+        for(int i = 0; i < nrangajati; i++){
+            if(std::strcmp(angajati[i].getSpecializare(), serviciuales->getNume()) == 0 && angajatDisponibil(programari, nrprog, angajati[i], data, ora)){
+                angajatbun[nrangajatbun++] = &angajati[i];
+            }
         }
 
         if(nrangajatbun==0){   //daca nu exista nicio varianta, mai intreb o data daca vrea sa mai incerce
             std::cout << "Nu exista niciun angajat disponibil pentru serviciul ales la data si ora introduse.\n";
-            std::cout << "Vrei sa mai adaugi o programare?: ";
+            std::cout << "Vrei sa mai adaugi o programare? (d/n): ";
             std::cin >> continua;
             continue;
         }
@@ -131,7 +129,7 @@ int main()
         std::cin >> optiuneAngajat;
         if(optiuneAngajat<1 || optiuneAngajat>nrangajatbun){             //daca e ales ceva ce nu exista, dau eroare
             std::cout << "Optiune invalida.\n";
-            std::cout << "Vrei sa mai adaugi o programare?: ";
+            std::cout << "Vrei sa mai adaugi o programare? (d/n): ";
             std::cin >> continua;
             continue;
         }
@@ -140,7 +138,7 @@ int main()
         std::cin >> optiunePlata;
         if(optiunePlata < 0 || optiunePlata > 2){                          //dau eroare daca nu exista varianta aleasa
             std::cout << "Tip de plata invalid.\n";
-            std::cout << "Vrei sa mai adaugi o programare?: ";
+            std::cout << "Vrei sa mai adaugi o programare? (d/n): ";
             std::cin >> continua;
             continue;
         }
@@ -151,13 +149,13 @@ int main()
         std::cout << "\nProgramarea a fost adaugata.\n";
         std::cout << programari[nrprog-1] << std::endl;    //afisez datele programarii realizate
 
-        std::cout << "\nVrei sa mai adaugi o programare?: ";
+        std::cout << "\nVrei sa mai adaugi o programare? (d/n): ";
         std::cin >> continua;
 
     }while((continua == 'd') && nrprog<100);               //cat timp raspund cu da
 
     char rasp;
-    std::cout << "\nVrei sa vezi cati bani s-au facut intr-o zi?: ";     //afisez functia calcIncasareZi
+    std::cout << "\nVrei sa vezi cati bani s-au facut intr-o zi? (d/n): ";     //afisez functia calcIncasareZi
     std::cin >> rasp;
     if(rasp == 'd'){
         char zic[11];                     //intreb ziua de interes
@@ -167,7 +165,7 @@ int main()
     }
 
 
-    std::cout << "\nVrei sa afli cat trebuie sa plateasca un client intr-o zi?: "; //cu tot cu toate reducerile posibile si multiple programari
+    std::cout << "\nVrei sa afli cat trebuie sa plateasca un client intr-o zi? (d/n): "; //cu tot cu toate reducerile posibile si multiple programari
     std::cin >> rasp;
     if(rasp == 'd'){
         char numec[20],prenumec[30],zic[11];
