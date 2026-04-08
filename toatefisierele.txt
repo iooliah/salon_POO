@@ -1,0 +1,773 @@
+#include <iostream>
+#include <cstring>
+
+class Angajat
+{
+private:
+    char* nume;
+    char* prenume;
+    int experienta;
+    char* specializare;
+    static int numarAngajati;
+
+public:
+    Angajat();
+    Angajat(const char* nume, const char* prenume, int experienta, const char* specializare);
+    Angajat(const Angajat& other);
+    Angajat& operator=(const Angajat& other);
+    ~Angajat();
+
+    const char* getNume() const;
+    const char* getPrenume() const;
+    int getExperienta() const;
+    const char* getSpecializare() const;
+
+    bool areExperienta() const;
+
+    friend std::ostream& operator<<(std::ostream& os, const Angajat& a);
+};
+
+class Client
+{
+private:
+    char* nume;
+    char* prenume;
+    char* telefon;
+    static int numarClienti;
+
+public:
+    Client();
+    Client(const char* nume, const char* prenume, const char* telefon);
+    Client(const Client& other);
+    Client& operator=(const Client& other);
+    ~Client();
+
+    const char* getNume() const;
+    const char* getPrenume() const;
+    const char* getTelefon() const;
+
+    friend std::ostream& operator<<(std::ostream& os, const Client& c);
+};
+
+class Serviciu
+{
+private:
+    char* nume;
+    float pret;
+    int durata;
+
+public:
+    Serviciu();
+    Serviciu(const char* nume, float pret, int durata);
+    Serviciu(const Serviciu& other);
+    Serviciu& operator=(const Serviciu& other);
+    ~Serviciu();
+
+    const char* getNume() const;
+    float getPret() const;
+    int getDurata() const;
+
+    friend std::ostream& operator<<(std::ostream& os, const Serviciu& s);
+};
+
+enum TipPlata
+{
+    CASH,
+    CARD,
+    TRANSFER
+};
+
+class Programare
+{
+private:
+    Client client;
+    Angajat angajat;
+    Serviciu serviciu;
+    char* data;
+    char* ora;
+    TipPlata tipPlata;
+    static bool esteAcelasiClient(const Client& c1, const Client& c2);
+
+public:
+    Programare();
+    Programare(const Client& client, const Angajat& angajat, const Serviciu& serviciu, const char* data, const char* ora, TipPlata tipPlata);
+    Programare(const Programare& other);
+    Programare& operator=(const Programare& other);
+    ~Programare();
+
+    Client getClient() const;
+    Angajat getAngajat() const;
+    Serviciu getServiciu() const;
+    const char* getData() const;
+    const char* getOra() const;
+    TipPlata getTipPlata() const;
+
+    void setData(const char* data);
+    void setOra(const char* ora);
+    void setTipPlata(TipPlata tipPlata);
+
+    float calcCostFinal(Programare programari[], int nrprog) const;
+    static int numaraProgramariClientZi(Programare programari[], int nrprog, const Client& client, const char* data);
+    static float calcIncasariZi(Programare programari[], int nrprog, const char* data);
+
+    friend std::ostream& operator<<(std::ostream& os, const Programare& p);
+};
+
+int Angajat::numarAngajati = 0;
+int Client::numarClienti = 0;
+
+Angajat::Angajat()
+{
+    nume = nullptr;
+    prenume = nullptr;
+    experienta = 0;
+    specializare = nullptr;
+    numarAngajati++;
+}
+
+Angajat::Angajat(const char* nume, const char* prenume, int experienta, const char* specializare)
+{
+    if (nume) {
+        this->nume = new char[strlen(nume) + 1];
+        strcpy(this->nume, nume);
+    } else {
+        this->nume = nullptr;
+    }
+
+    if (prenume) {
+        this->prenume = new char[strlen(prenume) + 1];
+        strcpy(this->prenume, prenume);
+    } else {
+        this->prenume = nullptr;
+    }
+
+    this->experienta = experienta;
+
+    if (specializare) {
+        this->specializare = new char[strlen(specializare) + 1];
+        strcpy(this->specializare, specializare);
+    } else {
+        this->specializare = nullptr;
+    }
+
+    numarAngajati++;
+}
+
+Angajat::Angajat(const Angajat& other)
+{
+    if (other.nume) {
+        nume = new char[strlen(other.nume) + 1];
+        strcpy(nume, other.nume);
+    } else {
+        nume = nullptr;
+    }
+
+    if (other.prenume) {
+        prenume = new char[strlen(other.prenume) + 1];
+        strcpy(prenume, other.prenume);
+    } else {
+        prenume = nullptr;
+    }
+
+    experienta = other.experienta;
+
+    if (other.specializare) {
+        specializare = new char[strlen(other.specializare) + 1];
+        strcpy(specializare, other.specializare);
+    } else {
+        specializare = nullptr;
+    }
+
+    numarAngajati++;
+}
+
+Angajat& Angajat::operator=(const Angajat& other)
+{
+    if (this != &other) {
+        delete[] nume;
+        delete[] prenume;
+        delete[] specializare;
+
+        if (other.nume) {
+            nume = new char[strlen(other.nume) + 1];
+            strcpy(nume, other.nume);
+        } else {
+            nume = nullptr;
+        }
+
+        if (other.prenume) {
+            prenume = new char[strlen(other.prenume) + 1];
+            strcpy(prenume, other.prenume);
+        } else {
+            prenume = nullptr;
+        }
+
+        experienta = other.experienta;
+
+        if (other.specializare) {
+            specializare = new char[strlen(other.specializare) + 1];
+            strcpy(specializare, other.specializare);
+        } else {
+            specializare = nullptr;
+        }
+    }
+
+    return *this;
+}
+
+Angajat::~Angajat()
+{
+    delete[] nume;
+    delete[] prenume;
+    delete[] specializare;
+    numarAngajati--;
+}
+
+const char* Angajat::getNume() const { return nume; }
+const char* Angajat::getPrenume() const { return prenume; }
+int Angajat::getExperienta() const { return experienta; }
+const char* Angajat::getSpecializare() const { return specializare; }
+
+bool Angajat::areExperienta() const
+{
+    return experienta >= 5;
+}
+
+std::ostream& operator<<(std::ostream& os, const Angajat& a)
+{
+    os << "Nume: " << a.nume << ", Prenume: " << a.prenume << ", Experienta: " << a.experienta << ", Specializare: " << a.specializare;
+    return os;
+}
+
+Client::Client()
+{
+    nume = nullptr;
+    prenume = nullptr;
+    telefon = nullptr;
+    numarClienti++;
+}
+
+Client::Client(const char* nume, const char* prenume, const char* telefon)
+{
+    if (nume) {
+        this->nume = new char[strlen(nume) + 1];
+        strcpy(this->nume, nume);
+    } else {
+        this->nume = nullptr;
+    }
+
+    if (prenume) {
+        this->prenume = new char[strlen(prenume) + 1];
+        strcpy(this->prenume, prenume);
+    } else {
+        this->prenume = nullptr;
+    }
+
+    if (telefon) {
+        this->telefon = new char[strlen(telefon) + 1];
+        strcpy(this->telefon, telefon);
+    } else {
+        this->telefon = nullptr;
+    }
+
+    numarClienti++;
+}
+
+Client::Client(const Client& other)
+{
+    if (other.nume) {
+        nume = new char[strlen(other.nume) + 1];
+        strcpy(nume, other.nume);
+    } else {
+        nume = nullptr;
+    }
+
+    if (other.prenume) {
+        prenume = new char[strlen(other.prenume) + 1];
+        strcpy(prenume, other.prenume);
+    } else {
+        prenume = nullptr;
+    }
+
+    if (other.telefon) {
+        telefon = new char[strlen(other.telefon) + 1];
+        strcpy(telefon, other.telefon);
+    } else {
+        telefon = nullptr;
+    }
+
+    numarClienti++;
+}
+
+Client& Client::operator=(const Client& other)
+{
+    if (this != &other) {
+        delete[] nume;
+        delete[] prenume;
+        delete[] telefon;
+
+        if (other.nume) {
+            nume = new char[strlen(other.nume) + 1];
+            strcpy(nume, other.nume);
+        } else {
+            nume = nullptr;
+        }
+
+        if (other.prenume) {
+            prenume = new char[strlen(other.prenume) + 1];
+            strcpy(prenume, other.prenume);
+        } else {
+            prenume = nullptr;
+        }
+
+        if (other.telefon) {
+            telefon = new char[strlen(other.telefon) + 1];
+            strcpy(telefon, other.telefon);
+        } else {
+            telefon = nullptr;
+        }
+    }
+
+    return *this;
+}
+
+Client::~Client()
+{
+    delete[] nume;
+    delete[] prenume;
+    delete[] telefon;
+    numarClienti--;
+}
+
+const char* Client::getNume() const { return nume; }
+const char* Client::getPrenume() const { return prenume; }
+const char* Client::getTelefon() const { return telefon; }
+
+std::ostream& operator<<(std::ostream& os, const Client& c)
+{
+    os << "Nume: " << c.nume << ", Prenume: " << c.prenume << ", Telefon: " << c.telefon;
+    return os;
+}
+
+Serviciu::Serviciu()
+{
+    nume = nullptr;
+    pret = 0.0f;
+    durata = 0;
+}
+
+Serviciu::Serviciu(const char* nume, float pret, int durata)
+{
+    if (nume) {
+        this->nume = new char[strlen(nume) + 1];
+        strcpy(this->nume, nume);
+    } else {
+        this->nume = nullptr;
+    }
+
+    this->pret = pret;
+    this->durata = durata;
+}
+
+Serviciu::Serviciu(const Serviciu& other) : pret(other.pret), durata(other.durata)
+{
+    if (other.nume) {
+        nume = new char[strlen(other.nume) + 1];
+        strcpy(nume, other.nume);
+    } else {
+        nume = nullptr;
+    }
+}
+
+Serviciu& Serviciu::operator=(const Serviciu& other)
+{
+    if (this != &other) {
+        delete[] nume;
+        pret = other.pret;
+        durata = other.durata;
+
+        if (other.nume) {
+            nume = new char[strlen(other.nume) + 1];
+            strcpy(nume, other.nume);
+        } else {
+            nume = nullptr;
+        }
+    }
+
+    return *this;
+}
+
+Serviciu::~Serviciu()
+{
+    delete[] nume;
+}
+
+const char* Serviciu::getNume() const { return nume; }
+float Serviciu::getPret() const { return pret; }
+int Serviciu::getDurata() const { return durata; }
+
+std::ostream& operator<<(std::ostream& os, const Serviciu& s)
+{
+    os << "Nume: " << s.nume << ", Pret: " << s.pret << ", Durata: " << s.durata << " minute";
+    return os;
+}
+
+Programare::Programare()
+{
+    data = nullptr;
+    ora = nullptr;
+    tipPlata = CASH;
+}
+
+Programare::Programare(const Client& client, const Angajat& angajat, const Serviciu& serviciu, const char* data, const char* ora, TipPlata tipPlata)
+    : client(client), angajat(angajat), serviciu(serviciu)
+{
+    if (data) {
+        this->data = new char[strlen(data) + 1];
+        strcpy(this->data, data);
+    } else {
+        this->data = nullptr;
+    }
+
+    if (ora) {
+        this->ora = new char[strlen(ora) + 1];
+        strcpy(this->ora, ora);
+    } else {
+        this->ora = nullptr;
+    }
+
+    this->tipPlata = tipPlata;
+}
+
+Programare::Programare(const Programare& other) : client(other.client), angajat(other.angajat), serviciu(other.serviciu)
+{
+    if (other.data) {
+        data = new char[strlen(other.data) + 1];
+        strcpy(data, other.data);
+    } else {
+        data = nullptr;
+    }
+
+    if (other.ora) {
+        ora = new char[strlen(other.ora) + 1];
+        strcpy(ora, other.ora);
+    } else {
+        ora = nullptr;
+    }
+
+    tipPlata = other.tipPlata;
+}
+
+Programare& Programare::operator=(const Programare& other)
+{
+    if (this != &other) {
+        client = other.client;
+        angajat = other.angajat;
+        serviciu = other.serviciu;
+
+        delete[] data;
+        delete[] ora;
+
+        if (other.data) {
+            data = new char[strlen(other.data) + 1];
+            strcpy(data, other.data);
+        } else {
+            data = nullptr;
+        }
+
+        if (other.ora) {
+            ora = new char[strlen(other.ora) + 1];
+            strcpy(ora, other.ora);
+        } else {
+            ora = nullptr;
+        }
+
+        tipPlata = other.tipPlata;
+    }
+
+    return *this;
+}
+
+Programare::~Programare()
+{
+    delete[] data;
+    delete[] ora;
+}
+
+Client Programare::getClient() const { return client; }
+Angajat Programare::getAngajat() const { return angajat; }
+Serviciu Programare::getServiciu() const { return serviciu; }
+const char* Programare::getData() const { return data; }
+const char* Programare::getOra() const { return ora; }
+TipPlata Programare::getTipPlata() const { return tipPlata; }
+
+void Programare::setData(const char* data)
+{
+    delete[] this->data;
+    if (data) {
+        this->data = new char[strlen(data) + 1];
+        strcpy(this->data, data);
+    } else {
+        this->data = nullptr;
+    }
+}
+
+void Programare::setOra(const char* ora)
+{
+    delete[] this->ora;
+    if (ora) {
+        this->ora = new char[strlen(ora) + 1];
+        strcpy(this->ora, ora);
+    } else {
+        this->ora = nullptr;
+    }
+}
+
+void Programare::setTipPlata(TipPlata tipPlata)
+{
+    this->tipPlata = tipPlata;
+}
+
+bool Programare::esteAcelasiClient(const Client& c1, const Client& c2)
+{
+    return std::strcmp(c1.getNume(), c2.getNume()) == 0 && std::strcmp(c1.getPrenume(), c2.getPrenume()) == 0;
+}
+
+int Programare::numaraProgramariClientZi(Programare programari[], int nrprog, const Client& client, const char* data)
+{
+    int nr = 0;
+    for (int i = 0; i < nrprog; i++) {
+        if (strcmp(programari[i].getData(), data) == 0 && esteAcelasiClient(programari[i].getClient(), client)) {
+            nr++;
+        }
+    }
+    return nr;
+}
+
+float Programare::calcCostFinal(Programare programari[], int nrprog) const
+{
+    float cost = serviciu.getPret();
+
+    if (angajat.areExperienta()) {
+        cost += 10;
+    }
+
+    if (strcmp(data, "11.09") == 0) {
+        cost = cost - cost * 0.10f;
+    }
+
+    if (tipPlata == CASH) {
+        cost = cost - 2;
+    }
+
+    if (numaraProgramariClientZi(programari, nrprog, client, data) >= 2) {
+        cost = cost - cost * 0.10f;
+    }
+
+    return cost;
+}
+
+float Programare::calcIncasariZi(Programare programari[], int nrprog, const char* data)
+{
+    float suma = 0.0f;
+    for (int i = 0; i < nrprog; i++) {
+        if (strcmp(programari[i].getData(), data) == 0) {
+            suma += programari[i].calcCostFinal(programari, nrprog);
+        }
+    }
+    return suma;
+}
+
+std::ostream& operator<<(std::ostream& os, const Programare& p)
+{
+    os << "Client: " << p.client << ", Angajat: " << p.angajat << ", Serviciu: " << p.serviciu
+       << ", Data: " << p.data << ", Ora: " << p.ora << ", Tip plata: ";
+
+    if (p.tipPlata == CASH)
+        os << "CASH";
+    else if (p.tipPlata == CARD)
+        os << "CARD";
+    else
+        os << "TRANSFER";
+
+    return os;
+}
+
+bool angajatDisponibil(const Programare programari[], int nrprog, const Angajat& angajat, const char* data, const char* ora)
+{
+    for (int i = 0; i < nrprog; i++) {
+        if (std::strcmp(programari[i].getData(), data) == 0 &&
+            std::strcmp(programari[i].getOra(), ora) == 0 &&
+            std::strcmp(programari[i].getAngajat().getNume(), angajat.getNume()) == 0 &&
+            std::strcmp(programari[i].getAngajat().getPrenume(), angajat.getPrenume()) == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int main()
+{
+    Client clienti[] = {
+        Client("Toader", "Ana", "0712345678"),
+        Client("Belceanu", "Maria", "0798765432"),
+        Client("Boros", "Eliza", "0701928356")
+    };
+
+    Angajat angajati[] = {
+        Angajat("Vladescu", "Ioana", 6, "manichiura"),
+        Angajat("Barbu", "Eric", 2, "coafor"),
+        Angajat("Trandafir", "Dana", 8, "coafor")
+    };
+
+    Serviciu servicii[] = {
+        Serviciu("manichiura", 120, 60),
+        Serviciu("coafor", 50, 30),
+        Serviciu("tratamente", 100, 25)
+    };
+
+    Programare programari[100];
+    int nrprog = 0;
+    const int nrclienti = 3, nrangajati = 3, nrservicii = 3;
+
+    char continua = 'd';
+
+    do {
+        char nume[20], prenume[30], data[11], ora[6];
+        int optiuneServiciu, optiuneAngajat, optiunePlata;
+
+        Client* gasit = nullptr;
+        Serviciu* serviciuales = nullptr;
+        Angajat* angajatbun[10];
+
+        std::cout << "Introdu numele clientului: ";
+        std::cin >> nume;
+        std::cout << "Introdu prenumele clientului: ";
+        std::cin >> prenume;
+
+        for (int i = 0; i < nrclienti; i++) {
+            if (std::strcmp(clienti[i].getNume(), nume) == 0 && std::strcmp(clienti[i].getPrenume(), prenume) == 0) {
+                gasit = &clienti[i];
+                break;
+            }
+        }
+
+        if (gasit == nullptr) {
+            std::cout << "Clientul nu exista.\n";
+            std::cout << "Vrei sa mai adaugi o programare? (d/n): ";
+            std::cin >> continua;
+            continue;
+        }
+
+        std::cout << "\nAlege serviciul:\n";
+        for (int i = 0; i < nrservicii; i++) {
+            std::cout << i + 1 << ". " << servicii[i] << '\n';
+        }
+
+        std::cin >> optiuneServiciu;
+
+        if (optiuneServiciu < 1 || optiuneServiciu > nrservicii) {
+            std::cout << "Serviciu invalid.\n";
+            std::cout << "Vrei sa mai adaugi o programare? (d/n): ";
+            std::cin >> continua;
+            continue;
+        }
+
+        serviciuales = &servicii[optiuneServiciu - 1];
+
+        std::cout << "Introdu data: ";
+        std::cin >> data;
+        std::cout << "Introdu ora: ";
+        std::cin >> ora;
+
+        int nrangajatbun = 0;
+        for (int i = 0; i < nrangajati; i++) {
+            if (std::strcmp(angajati[i].getSpecializare(), serviciuales->getNume()) == 0 &&
+                angajatDisponibil(programari, nrprog, angajati[i], data, ora)) {
+                angajatbun[nrangajatbun++] = &angajati[i];
+            }
+        }
+
+        if (nrangajatbun == 0) {
+            std::cout << "Nu exista niciun angajat disponibil pentru serviciul ales la data si ora introduse.\n";
+            std::cout << "Vrei sa mai adaugi o programare? (d/n): ";
+            std::cin >> continua;
+            continue;
+        }
+
+        std::cout << "\nAngajatii disponibili sunt:\n";
+        for (int i = 0; i < nrangajatbun; i++) {
+            std::cout << i + 1 << ". " << *angajatbun[i] << std::endl;
+        }
+
+        std::cout << "Alege angajatul: ";
+        std::cin >> optiuneAngajat;
+
+        if (optiuneAngajat < 1 || optiuneAngajat > nrangajatbun) {
+            std::cout << "Optiune invalida.\n";
+            std::cout << "Vrei sa mai adaugi o programare? (d/n): ";
+            std::cin >> continua;
+            continue;
+        }
+
+        std::cout << "Tip plata (0 = CASH, 1 = CARD, 2 = TRANSFER): ";
+        std::cin >> optiunePlata;
+
+        if (optiunePlata < 0 || optiunePlata > 2) {
+            std::cout << "Tip de plata invalid.\n";
+            std::cout << "Vrei sa mai adaugi o programare? (d/n): ";
+            std::cin >> continua;
+            continue;
+        }
+
+        programari[nrprog++] = Programare(*gasit, *angajatbun[optiuneAngajat - 1], *serviciuales, data, ora, (TipPlata)optiunePlata);
+
+        std::cout << "\nProgramarea a fost adaugata.\n";
+        std::cout << programari[nrprog - 1] << std::endl;
+
+        std::cout << "\nVrei sa mai adaugi o programare? (d/n): ";
+        std::cin >> continua;
+
+    } while ((continua == 'd') && nrprog < 100);
+
+    char rasp;
+    std::cout << "\nVrei sa vezi cati bani s-au facut intr-o zi? (d/n): ";
+    std::cin >> rasp;
+
+    if (rasp == 'd') {
+        char zic[11];
+        std::cout << "Introdu ziua: ";
+        std::cin >> zic;
+        std::cout << "Incasarile din ziua " << zic << " sunt: " << Programare::calcIncasariZi(programari, nrprog, zic) << " lei.\n";
+    }
+
+    std::cout << "\nVrei sa afli cat trebuie sa plateasca un client intr-o zi? (d/n): ";
+    std::cin >> rasp;
+
+    if (rasp == 'd') {
+        char numec[20], prenumec[30], zic[11];
+        float total = 0;
+
+        std::cout << "Introdu numele clientului: ";
+        std::cin >> numec;
+        std::cout << "Introdu prenumele clientului: ";
+        std::cin >> prenumec;
+        std::cout << "Introdu ziua: ";
+        std::cin >> zic;
+
+        for (int i = 0; i < nrprog; i++) {
+            if (std::strcmp(programari[i].getData(), zic) == 0 &&
+                std::strcmp(programari[i].getClient().getNume(), numec) == 0 &&
+                std::strcmp(programari[i].getClient().getPrenume(), prenumec) == 0) {
+                total += programari[i].calcCostFinal(programari, nrprog);
+            }
+        }
+
+        std::cout << "Clientul trebuie sa plateasca: " << total << " lei.\n";
+    }
+
+    std::cout << "\nMultumim ca ati ales salonul nostru! Echipa noastra de " << nrangajati
+              << " angajati pune zambetul pe " << nrclienti << " fete!\n";
+
+    return 0;
+}
